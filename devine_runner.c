@@ -1,4 +1,5 @@
-#include <kpms.h>
+#include <compiler.h>
+#include <kpmodule.h>
 #include <linux/kmod.h>
 #include <linux/kernel.h>
 
@@ -6,7 +7,7 @@
 
 KPM_NAME("devine-runner");
 KPM_VERSION("1.0.0");
-KPM_LICENSE("GPL");
+KPM_LICENSE("GPL v2");
 KPM_AUTHOR("Gautam");
 KPM_DESCRIPTION("Runs Devine script on boot");
 
