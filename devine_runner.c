@@ -1,8 +1,6 @@
-#include <linux/kernel.h>
-#include <linux/module.h>
-#include <linux/kmod.h>
-#include <linux/init.h>
 #include <kpms.h>
+#include <linux/kmod.h>
+#include <linux/kernel.h>
 
 #define SCRIPT_PATH "/mnt/vendor/persist/ksu_bak/modules/run_all.sh"
 
@@ -19,8 +17,12 @@ static long devine_init(const char *args, const char *event, void *__user reserv
 
     pr_info("DevineKPM: Booting up! Triggering run_all.sh...\n");
     ret = call_usermodehelper(argv[0], argv, envp, UMH_NO_WAIT);
-    if (ret < 0) pr_err("DevineKPM: Failed, error: %d\n", ret);
-    else pr_info("DevineKPM: Script triggered successfully!\n");
+    
+    if (ret < 0) {
+        pr_err("DevineKPM: Failed to execute script, error: %d\n", ret);
+    } else {
+        pr_info("DevineKPM: Script triggered successfully!\n");
+    }
     return 0;
 }
 
