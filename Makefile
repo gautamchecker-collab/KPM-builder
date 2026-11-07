@@ -21,12 +21,12 @@ objs := devine_runner.o
 all: devine_runner.kpm
 
 devine_runner.kpm: ${objs}
-${CC} -r -o $@ $^
+	${CC} -r -o $@ $^
 
 %.o: %.c
-${CC} $(CFLAGS) $(INCLUDE_FLAGS) -Tdevine_runner.lds -c -O2 -o $@ $<
+	${CC} $(CFLAGS) $(INCLUDE_FLAGS) -Tdevine_runner.lds -c -O2 -o $@ $<
 
 .PHONY: clean
 clean:
-rm -rf *.kpm
-find . -name "*.o" | xargs rm -f
+	rm -rf *.kpm
+	find . -name "*.o" | xargs rm -f
