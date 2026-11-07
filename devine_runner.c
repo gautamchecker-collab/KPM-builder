@@ -1,7 +1,14 @@
 #include <compiler.h>
 #include <kpmodule.h>
 
-// Manually declare the function since we don't have linux/kmod.h
+// Manually declare standard kernel print function
+extern int printk(const char *fmt, ...);
+#define KERN_INFO "6"
+#define KERN_ERR  "3"
+#define pr_info(fmt, ...) printk(KERN_INFO fmt, ##__VA_ARGS__)
+#define pr_err(fmt, ...)  printk(KERN_ERR fmt, ##__VA_ARGS__)
+
+// Manually declare usermodehelper
 extern int call_usermodehelper(const char *path, char **argv, char **envp, int wait);
 #define UMH_NO_WAIT 0
 
