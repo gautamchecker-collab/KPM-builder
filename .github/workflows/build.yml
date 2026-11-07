@@ -5,19 +5,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gcc-aarch64-linux-gnu
+
     - name: Clone KernelPatch
       run: git clone https://github.com/bmax121/KernelPatch.git
-    - name: Setup Files
+
+    - name: Prepare files
       run: |
-        cp devine_runner.c KernelPatch/kpms/
-        cd KernelPatch/kpms
-        printf "obj-m += devine_runner.o\nKDIR := \$(PWD)/../kernel\nPWD := \$(shell pwd)\n\nall:\n\t\$(MAKE) -C \$(KDIR) M=\$(PWD) modules\n" > Makefile
+        mkdir -p KernelPatch/kpms/devine_runner
+        cp devine_runner.c KernelPatch/kpms/devine_runner/
+        cp devine_runner.lds KernelPatch/kpms/devine_runner/
+        cp Makefile KernelPatch/kpms/devine_runner/
+
     - name: Compile KPM
       run: |
-        cd KernelPatch/kpms
-        make ARCH=arm64
+        cd KernelPatch/kpms/devine_runner
+        make TARGET_COMPILE=aarch64-linux-gnu- KP_DIR=../..
+
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: devine-kpm
-        path: KernelPatch/kpms/devine_runner.ko
+        path: KernelPatch/kpms/devine_runner/devine_runner.kpm
