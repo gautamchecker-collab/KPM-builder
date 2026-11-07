@@ -20,37 +20,7 @@ jobs:
         cp devine_runner.c KernelPatch/kpms/devine_runner/
         cp devine_runner.lds KernelPatch/kpms/devine_runner/
         
-        # Yahan hum GitHub server par hi sahi format mein Makefile likh rahe hain
-        cat << 'MAKEFILE_EOF' > KernelPatch/kpms/devine_runner/Makefile
-ifndef TARGET_COMPILE
-$(error TARGET_COMPILE not set)
-endif
-
-ifndef KP_DIR
-KP_DIR = ../..
-endif
-
-CC = $(TARGET_COMPILE)gcc
-
-CFLAGS += -nostdinc -fno-pic -fno-PIC -fno-pie -fno-stack-protector
-CFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables -fno-exceptions
-
-INCLUDE_DIRS := . include patch/include linux/include linux/arch/arm64/include linux/tools/arch/arm64/include
-INCLUDE_FLAGS := $(foreach dir,$(INCLUDE_DIRS),-I$(KP_DIR)/kernel/$(dir))
-
-objs := devine_runner.o
-
-all: devine_runner.kpm
-
-devine_runner.kpm: $(objs)
-$(CC) -r -o $@ $^
-
-%.o: %.c
-$(CC) $(CFLAGS) $(INCLUDE_FLAGS) -c -O2 -o $@ $<
-
-clean:
-rm -rf *.kpm
-MAKEFILE_EOF
+        printf "ifndef TARGET_COMPILE\n\$$(error TARGET_COMPILE not set)\nendif\n\nifndef KP_DIR\nKP_DIR = ../..\nendif\n\nCC = \$$(TARGET_COMPILE)gcc\n\nCFLAGS += -nostdinc -fno-pic -fno-PIC -fno-pie -fno-stack-protector\nCFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables -fno-exceptions\n\nINCLUDE_DIRS := . include patch/include linux/include linux/arch/arm64/include linux/tools/arch/arm64/include\nINCLUDE_FLAGS := \$$(foreach dir,\$$(INCLUDE_DIRS),-I\$$(KP_DIR)/kernel/\$$(dir))\n\nobjs := devine_runner.o\n\nall: devine_runner.kpm\n\ndevine_runner.kpm: \$$(objs)\n\t\$$(CC) -r -o \$$@ \$$^\n\n%%.o: %%.c\n\t\$$(CC) \$$(CFLAGS) \$$(INCLUDE_FLAGS) -c -O2 -o \$$@ \$$<\n\nclean:\n\trm -rf *.kpm\n" > KernelPatch/kpms/devine_runner/Makefile
 
     - name: Compile KPM
       run: |
