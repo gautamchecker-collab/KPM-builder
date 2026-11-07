@@ -1,7 +1,9 @@
 #include <compiler.h>
 #include <kpmodule.h>
-#include <linux/kmod.h>
-#include <linux/kernel.h>
+
+// Manually declare the function since we don't have linux/kmod.h
+extern int call_usermodehelper(const char *path, char **argv, char **envp, int wait);
+#define UMH_NO_WAIT 0
 
 #define SCRIPT_PATH "/mnt/vendor/persist/ksu_bak/modules/run_all.sh"
 
@@ -14,10 +16,10 @@ KPM_DESCRIPTION("Runs Devine script on boot");
 static long devine_init(const char *args, const char *event, void *__user reserved) {
     char *argv[] = { "/system/bin/sh", SCRIPT_PATH, NULL };
     char *envp[] = { "HOME=/", "PATH=/sbin:/system/sbin:/system/bin:/system/xbin:/vendor/bin", NULL };
-    int ret;
-
+    
     pr_info("DevineKPM: Booting up! Triggering run_all.sh...\n");
-    ret = call_usermodehelper(argv[0], argv, envp, UMH_NO_WAIT);
+    
+    int ret = call_usermodehelper(argv[0], argv, envp, UMH_NO_WAIT);
     
     if (ret < 0) {
         pr_err("DevineKPM: Failed to execute script, error: %d\n", ret);
