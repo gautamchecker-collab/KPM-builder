@@ -4,7 +4,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Clone KernelPatch
       run: git clone https://github.com/bmax121/KernelPatch.git
     - name: Setup Files
@@ -17,7 +17,7 @@ jobs:
         cd KernelPatch/kpms
         make ARCH=arm64
     - name: Upload Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: devine-kpm
         path: KernelPatch/kpms/devine_runner.ko
