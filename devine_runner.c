@@ -1,6 +1,9 @@
 #include <compiler.h>
 #include <kpmodule.h>
 
+// Manually declare printk for minimal test
+extern int printk(const char *fmt, ...);
+
 KPM_NAME("test-kpm");
 KPM_VERSION("1.0.0");
 KPM_LICENSE("GPL v2");
