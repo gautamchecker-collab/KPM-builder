@@ -3,13 +3,16 @@
 
 extern int printk(const char *fmt, ...);
 
+// Manually declare missing functions and variables
+extern const char linux_banner[];
+extern char *strstr(const char *haystack, const char *needle);
+
 KPM_NAME("devine-runner");
 KPM_VERSION("2.0.0-no-crash");
 KPM_LICENSE("GPL v2");
 KPM_AUTHOR("Gautam");
 KPM_DESCRIPTION("Runs Devine script on boot (Safe mode)");
 
-// Ye function sirf log print karega, koi code execute nahi karega
 static long devine_init(const char *args, const char *event, void *__user reserved) {
     printk("DevineKPM: Module loaded. Checking environment...\n");
 
